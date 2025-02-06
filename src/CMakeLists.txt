@@ -200,6 +200,10 @@ if(ICONV_FOUND)
 endif()
 add_feature_info(iconv GIT_USE_ICONV "iconv encoding conversion support")
 
+add_subdirectory("${PROJECT_SOURCE_DIR}/deps/reftable" "${PROJECT_BINARY_DIR}/deps/reftable")
+list(APPEND LIBGIT2_DEPENDENCY_INCLUDES "${PROJECT_SOURCE_DIR}/deps/reftable")
+list(APPEND LIBGIT2_DEPENDENCY_OBJECTS "$<TARGET_OBJECTS:reftable>")
+
 #
 # Include child projects
 #
