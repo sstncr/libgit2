@@ -65,7 +65,7 @@ jobs:
             CMAKE_OPTIONS: -DUSE_HTTPS=mbedTLS -DUSE_SHA1=HTTPS -DDEPRECATE_HARD=ON -DUSE_LEAK_CHECKER=valgrind -DUSE_GSSAPI=ON -DUSE_SSH=libssh2
         - name: "macOS"
           id: macos
-          os: macos-12
+          os: macos-14
           setup-script: osx
           env:
             CC: clang
@@ -74,9 +74,19 @@ jobs:
             PKG_CONFIG_PATH: /usr/local/opt/openssl/lib/pkgconfig
             SKIP_SSH_TESTS: true
             SKIP_NEGOTIATE_TESTS: true
+        - name: "iOS"
+          id: ios
+          os: macos-14
+          setup-script: ios
+          env:
+            CC: clang
+            CMAKE_OPTIONS: -DBUILD_TESTS=OFF -DDEPRECATE_HARD=ON -DUSE_LEAK_CHECKER=leaks -DUSE_GSSAPI=ON -DCMAKE_TOOLCHAIN_FILE=../ios.toolchain.cmake -DCMAKE_SYSTEM_NAME=iOS -DPLATFORM=OS64
+            CMAKE_GENERATOR: Ninja
+            PKG_CONFIG_PATH: /usr/local/opt/openssl/lib/pkgconfig
+            SKIP_TESTS: true # Cannot exec iOS app on macOS
         - name: "Windows (amd64, Visual Studio, Schannel)"
           id: windows-amd64-vs
-          os: windows-2019
+          os: windows-2022
           setup-script: win32
           env:
             ARCH: amd64
@@ -346,7 +356,7 @@ jobs:
           os: ubuntu-latest
         - name: "macOS (SHA256)"
           id: macos-sha256
-          os: macos-12
+          os: macos-14
           setup-script: osx
           env:
             CC: clang
