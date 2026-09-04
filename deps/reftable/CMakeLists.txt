@@ -9,7 +9,7 @@ set_property(TARGET reftable PROPERTY C_STANDARD 99)
 target_sources(reftable PRIVATE ${SRC_REFTABLE})
 target_include_directories(reftable PRIVATE
 	include
-	"${PROJECT_BINARY_DIR}/src/util"
+	"${PROJECT_BINARY_DIR}/gen_headers"
 	"${PROJECT_BINARY_DIR}/include"
 	"${PROJECT_SOURCE_DIR}/src/util"
 	"${PROJECT_SOURCE_DIR}/include"
