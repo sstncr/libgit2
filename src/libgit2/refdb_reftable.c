@@ -222,15 +222,15 @@ static int refdb_reftable_reference_from_record(git_reference **out,
 		break;
 	case REFTABLE_REF_VAL1: {
 		git_oid oid;
-		if ((error = git_oid_from_raw(&oid, record->value.val1, type)) < 0)
+		if ((error = git_oid__fromraw(&oid, record->value.val1, type)) < 0)
 			goto out;
 		ref = git_reference__alloc(record->refname, &oid, NULL);
 		break;
 	}
 	case REFTABLE_REF_VAL2: {
 		git_oid oid, peeled;
-		if ((error = git_oid_from_raw(&oid, record->value.val2.value, type)) < 0 ||
-		    (error = git_oid_from_raw(&peeled, record->value.val2.target_value, type)) < 0)
+		if ((error = git_oid__fromraw(&oid, record->value.val2.value, type)) < 0 ||
+		    (error = git_oid__fromraw(&peeled, record->value.val2.target_value, type)) < 0)
 			goto out;
 		ref = git_reference__alloc(record->refname, &oid, &peeled);
 		break;
@@ -400,7 +400,7 @@ static int refdb_reftable_check_ref(refdb_reftable_stack *stack,
 #endif
 		git_oid oid;
 
-		if ((error = git_oid_from_raw(&oid, reftable_ref_record_val1(&ref), oid_type)) < 0)
+		if ((error = git_oid__fromraw(&oid, reftable_ref_record_val1(&ref), oid_type)) < 0)
 			goto out;
 		if (!git_oid_equal(&oid, expected_oid)) {
 			error = GIT_EMODIFIED;
@@ -1238,7 +1238,7 @@ static int refdb_reftable_write_rename_table(struct reftable_writer *writer, voi
 			break;
 		case REFTABLE_REF_VAL1:
 		case REFTABLE_REF_VAL2:
-			if ((error = git_oid_from_raw(&oid, reftable_ref_record_val1(&existing),
+			if ((error = git_oid__fromraw(&oid, reftable_ref_record_val1(&existing),
 						      data->backend->repo->oid_type)) < 0) {
 				data->error = error;
 				goto out;
@@ -1537,9 +1537,9 @@ static int refdb_reftable_reflog_read(git_reflog **out,
 				entry->msg = git__strndup(record.value.update.message, len);
 		}
 
-		if ((error = git_oid_from_raw(&entry->oid_old, record.value.update.old_hash,
+		if ((error = git_oid__fromraw(&entry->oid_old, record.value.update.old_hash,
 					      backend->repo->oid_type)) < 0 ||
-		    (error = git_oid_from_raw(&entry->oid_cur, record.value.update.new_hash,
+		    (error = git_oid__fromraw(&entry->oid_cur, record.value.update.new_hash,
 					      backend->repo->oid_type)) < 0) {
 			git_reflog_entry__free(entry);
 			goto out;
